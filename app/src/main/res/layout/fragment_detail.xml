@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="tmdbItem"
+            type="com.sample.android.movie.domain.model.TmdbItem" />
+
+        <variable
+            name="vm"
+            type="com.sample.android.movie.ui.detail.DetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/details_motion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/details_backdrop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{tmdbItem.backdropUrl}"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/details_backdrop_scrim"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/details_backdrop"
+            app:layout_constraintEnd_toEndOf="@id/details_backdrop"
+            app:layout_constraintStart_toStartOf="@id/details_backdrop"
+            app:layout_constraintTop_toTopOf="@id/details_backdrop" />
+
+
+        <View
+            android:id="@+id/details_gap_filler"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/window_background"
+            app:layout_constraintBottom_toTopOf="@id/details_rv"
+            tools:ignore="PxUsage" />
+
+        <com.sample.android.movie.widget.TopLeftCutoutBackgroundView
+            android:id="@+id/details_appbar_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:backgroundColor="@color/window_background"
+            app:topLeftCutSize="@dimen/details_corner_cutout" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/details_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:ellipsize="end"
+            app:layout_constraintBaseline_toBaselineOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_toolbar"
+            android:text="@{tmdbItem.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/details_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:theme="@style/Toolbar"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/details_rv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/window_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TmdbMargin.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_normal"
+                    android:text="@{@string/release_date(tmdbItem.releaseDate)}"
+                    app:toVisibility="@{!tmdbItem.releaseDate.empty &amp; tmdbItem.releaseDate!=null}" />
+
+                <TextView
+                    style="@style/TmdbMargin.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/rating(tmdbItem.voteAverage)}"
+                    app:toVisibility="@{tmdbItem.voteAverage!=0.0}" />
+
+                <TextView
+                    android:id="@+id/summary_label"
+                    style="@style/TmdbMargin.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/summary" />
+
+                <TextView
+                    android:id="@+id/summary"
+                    style="@style/TmdbMargin.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{tmdbItem.overview}" />
+
+                <include
+                    layout="@layout/trailers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_normal"
+                    android:layout_marginTop="@dimen/padding_large"
+                    app:vm="@{vm}"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    style="@style/TmdbMargin.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cast"
+                     />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cast_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_normal"
+                   />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/crew_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_normal"
+                    />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
